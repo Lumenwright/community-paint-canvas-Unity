@@ -95,6 +95,7 @@ public class WebRequest : MonoBehaviour
             else
             {
                 Debug.Log("Form upload complete!");
+                Get();
             }
         }
     }

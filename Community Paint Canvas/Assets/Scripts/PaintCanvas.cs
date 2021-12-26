@@ -13,12 +13,12 @@ public class PaintCanvas : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        _onlineCanvas.m_CanvasChanged.AddListener(GenerateCanvas);
         root = GetComponent<UIDocument>().rootVisualElement;
+        GenerateCanvas();
+        _onlineCanvas.m_CanvasChanged.AddListener(OnClick);
     }
 
     void GenerateCanvas(){
-        Debug.Log("The canvas was refreshed");
         for(int i = 0; i<5; i++){
             Row newRow = new Row();
             for(int j =0; j<5; j++){
@@ -28,5 +28,9 @@ public class PaintCanvas : MonoBehaviour
             }
             root.Add(newRow);
         }
+    }
+
+    void OnClick(){
+            Debug.Log("The canvas was refreshed");
     }
 }

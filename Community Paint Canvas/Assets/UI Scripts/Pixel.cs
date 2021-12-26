@@ -15,7 +15,7 @@ public class Pixel : VisualElement
 
     void OnPointerDown(PointerDownEvent evt){
         Debug.Log("clicked");
-        WebRequest.CanvasAPI.Get();
+        WebRequest.CanvasAPI.Post();
     }
 }
 
