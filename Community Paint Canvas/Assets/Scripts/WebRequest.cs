@@ -36,7 +36,7 @@ public class WebRequest : MonoBehaviour
         StartCoroutine(GetRequest(PIXELS_ENDPOINT));
     }
 
-    public void Post(){
+    public void Post(string x, string y){
         string X_NAME = "x";
         string Y_NAME = "y";
         string RED = "r";
@@ -46,8 +46,8 @@ public class WebRequest : MonoBehaviour
         string test = "0";
 
         Dictionary<string,string> p = new Dictionary<string,string>();
-        p.Add(X_NAME, test);
-        p.Add(Y_NAME, test);
+        p.Add(X_NAME, x);
+        p.Add(Y_NAME, y);
         p.Add(RED, test );
         p.Add(GREEN, test);
         p.Add(BLUE, test);

@@ -6,7 +6,15 @@ using UnityEngine.UIElements;
 
 public class Pixel : VisualElement
 {
+    public string X {get=>_x;}
+    string _x;
+    public string Y {get=>_y;}
+    string _y;
     public Pixel(){
+    }
+    public void Init(string x, string y){
+        _x = x;
+        _y = y;
         AddToClassList("pixel-container");
         VisualTreeAsset _pixelTemplate = Resources.Load<VisualTreeAsset>("Pixel_Template");
         _pixelTemplate.CloneTree(this);
@@ -15,7 +23,7 @@ public class Pixel : VisualElement
 
     void OnPointerDown(PointerDownEvent evt){
         Debug.Log("clicked");
-        WebRequest.CanvasAPI.Post();
+        WebRequest.CanvasAPI.Post(X, Y);
     }
 }
 

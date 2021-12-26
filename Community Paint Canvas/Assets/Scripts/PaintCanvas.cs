@@ -23,6 +23,7 @@ public class PaintCanvas : MonoBehaviour
             Row newRow = new Row();
             for(int j =0; j<5; j++){
                 Pixel newPx = new Pixel();
+                newPx.Init(i.ToString(),j.ToString());
                 var container = newRow.Q<VisualElement>("RowElement");
                 container.Add(newPx);
             }
