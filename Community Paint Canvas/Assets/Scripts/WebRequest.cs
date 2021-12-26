@@ -12,6 +12,8 @@ public class WebRequest : MonoBehaviour
 
     public static WebRequest CanvasAPI;
 
+    string PIXELS_ENDPOINT = "http://127.0.0.1:5000/pixels";
+
     void Awake(){
         if(CanvasAPI != null){
             Destroy(this);
@@ -31,7 +33,25 @@ public class WebRequest : MonoBehaviour
     // Start is called before the first frame update
     public void Get()
     {
-        StartCoroutine(GetRequest("http://127.0.0.1:5000/pixels"));
+        StartCoroutine(GetRequest(PIXELS_ENDPOINT));
+    }
+
+    public void Post(){
+        string X_NAME = "x";
+        string Y_NAME = "y";
+        string RED = "r";
+        string GREEN = "g";
+        string BLUE = "b";
+
+        string test = "0";
+
+        Dictionary<string,string> p = new Dictionary<string,string>();
+        p.Add(X_NAME, test);
+        p.Add(Y_NAME, test);
+        p.Add(RED, test );
+        p.Add(GREEN, test);
+        p.Add(BLUE, test);
+        StartCoroutine(Upload(PIXELS_ENDPOINT, p));
     }
 
     IEnumerator GetRequest(string uri)
@@ -58,6 +78,23 @@ public class WebRequest : MonoBehaviour
                     _canvasData = webRequest.downloadHandler.text;
                     m_CanvasChanged.Invoke();
                     break;
+            }
+        }
+    }
+    IEnumerator Upload(string uri, Dictionary<string,string> p)
+    {
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri,p))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
             }
         }
     }
