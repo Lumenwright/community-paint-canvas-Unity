@@ -10,18 +10,31 @@ public class PaintCanvas : MonoBehaviour
 
     VisualTreeAsset _pixelTemplate;
 
+    public static PaintCanvas CanvasController;
+    void Awake(){
+        if(CanvasController!=null){
+            Destroy(this);
+        }
+        else{
+            CanvasController = this;
+        }
+        enabled = false;
+    }
     // Start is called before the first frame update
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
-        GenerateCanvas();
-        _onlineCanvas.m_CanvasChanged.AddListener(OnClick);
+        WebRequest.CanvasAPI.Get();
+        _onlineCanvas.m_CanvasChanged.AddListener(GenerateCanvas);
     }
 
     void GenerateCanvas(){
-        for(int i = 0; i<5; i++){
+        List<List<Px>> canvas = _onlineCanvas.CanvasData;
+        var lenX = canvas.Count;
+        var lenY = canvas[0].Count;
+        for(int i = 0; i<lenX; i++){
             Row newRow = new Row();
-            for(int j =0; j<5; j++){
+            for(int j =0; j<lenY; j++){
                 Pixel newPx = new Pixel();
                 newPx.Init(i.ToString(),j.ToString());
                 var container = newRow.Q<VisualElement>("RowElement");
@@ -29,6 +42,9 @@ public class PaintCanvas : MonoBehaviour
             }
             root.Add(newRow);
         }
+        _onlineCanvas.m_CanvasChanged.RemoveListener(GenerateCanvas);
+        _onlineCanvas.m_CanvasChanged.AddListener(OnClick);
+
     }
 
     void OnClick(){
