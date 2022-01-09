@@ -7,7 +7,8 @@ public class EventSystem : MonoBehaviour
     public PaintCanvas CanvasUI;
     public PalettePanel MainPanel;
 
-    void Awake(){
+    void OnEnable(){
+        Debug.Log("services");
         if(Services != null){
             Destroy(this);
         }

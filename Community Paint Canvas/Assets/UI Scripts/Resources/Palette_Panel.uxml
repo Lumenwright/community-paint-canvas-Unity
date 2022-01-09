@@ -1,5 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="Counter" src="project://database/Assets/UI%20Scripts/Resources/Counter.uxml?fileID=9197481963319205126&amp;guid=0c78ad0409788d542b0600736c1cf074&amp;type=3#Counter" />
     <ui:Instance template="Counter" name="Counter" />
+    <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" name="response-field" />
     <ui:Button text="Submit" display-tooltip-when-elided="true" name="submit-button" />
+    <ui:Label text="Submitted" display-tooltip-when-elided="true" name="confirmation" style="background-color: rgb(0, 255, 0); color: rgb(0, 0, 0); visibility: hidden;" />
 </ui:UXML>

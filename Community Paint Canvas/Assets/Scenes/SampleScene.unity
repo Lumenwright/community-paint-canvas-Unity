@@ -193,7 +193,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97939308}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb06b916459d8564cbd1f240826c4825, type: 3}
   m_Name: 
@@ -448,8 +448,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2020110862}
-  - component: {fileID: 2020110863}
   - component: {fileID: 2020110861}
+  - component: {fileID: 2020110863}
   - component: {fileID: 2020110860}
   m_Layer: 0
   m_Name: Controller
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020110859}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 122e22fff52c0ed40bf11ebac9c9d40a, type: 3}
   m_Name: 

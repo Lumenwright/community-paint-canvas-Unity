@@ -16,6 +16,8 @@ public class PaintCanvas : MonoBehaviour
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("canvas");
+        Debug.Log("canvas");
+        Debug.Log(EventSystem.Services);
         EventSystem.Services.CanvasAPI.m_CanvasChanged.AddListener(GenerateCanvas);
         ResetSubmission();
     }

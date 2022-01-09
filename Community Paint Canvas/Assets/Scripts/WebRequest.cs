@@ -25,6 +25,7 @@ public class WebRequest :MonoBehaviour
 
     public UnityEvent m_CanvasChanged;
     void OnEnable(){
+        Debug.Log("web");
         if (m_CanvasChanged == null)
             m_CanvasChanged = new UnityEvent();
     }
