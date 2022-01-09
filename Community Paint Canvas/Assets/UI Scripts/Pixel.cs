@@ -9,7 +9,7 @@ public class Pixel : VisualElement
 {
 
     Color _activeColour = Color.black;
-    Color _inactiveColour = Color.gray;
+    Color _previousColour;
 
     public int X {get=>_x;}
     int _x;
@@ -32,21 +32,26 @@ public class Pixel : VisualElement
         this.Q<Button>().RegisterCallback<PointerDownEvent>(OnPointerDown);
 
         //change bg colour
-        Debug.Log(p.g);
-        _inactiveColour = new Color(p.r, p.g, p.b); 
-        ChangeColour(_inactiveColour);
+        _previousColour = new Color(p.r, p.g, p.b); 
+        ChangeColour(_previousColour);
     }
 
     void OnPointerDown(PointerDownEvent evt){
         Debug.Log("clicked");
         _isActive = !_isActive;
         if(_isActive){
+            _pixelObj.r = _activeColour.r;
+            _pixelObj.g = _activeColour.g;
+            _pixelObj.b = _activeColour.b;
             EventSystem.Services.CanvasUI.AddPixel(_pixelObj);
             ChangeColour(_activeColour);
         }
         else{
+            _pixelObj.r = _previousColour.r;
+            _pixelObj.g = _previousColour.g;
+            _pixelObj.b = _previousColour.b;
             EventSystem.Services.CanvasUI.RemovePixel(_pixelObj);
-            ChangeColour(_inactiveColour);
+            ChangeColour(_previousColour);
         }
 
     }

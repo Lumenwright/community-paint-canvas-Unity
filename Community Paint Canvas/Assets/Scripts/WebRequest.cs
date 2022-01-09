@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace JsonClasses{
 public class WebRequest :MonoBehaviour
@@ -53,11 +54,14 @@ public class WebRequest :MonoBehaviour
     public void Post(PixelSubmission s){
         if(enabled){
             string c = JsonConvert.SerializeObject(s);
-            StartCoroutine(Upload(PIXELS_ENDPOINT, c));
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            d.Add(NEW_PX_NAME, c);
+            StartCoroutine(Upload(PIXELS_ENDPOINT, d));
         }
     }
 
-    public void Submit(List<PixelData> list){
+    public void Submit(){
+        var list = EventSystem.Services.CanvasUI.ChangedPixels;
         PixelSubmission sub = new PixelSubmission(list);
         Post(sub);
     }
@@ -101,34 +105,39 @@ public class WebRequest :MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(www.error);
+                Debug.Log($"{www.error} when uploading: {p}");
             }
             else
             {
-                Debug.Log("Single pixel upload complete!");
+                Debug.Log($"Completed upload:{p}");
                 Get();
             }
         }
     }
 
+//DOESNT WORK
+/*
     IEnumerator Upload(string uri, string p)
     {
+        var bytejson = Encoding.UTF8.GetBytes(p);
+        UnityWebRequest www = new UnityWebRequest(uri,"POST");
+        www.uploadHandler = (UploadHandler) new UploadHandlerRaw(bytejson);
+        
+        www.SetRequestHeader("Content-Type","application/json");
+        yield return www.SendWebRequest();
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri,p))
+        if (www.result != UnityWebRequest.Result.Success)
         {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("New canvas portion upload complete!");
-                Get();
-            }
+            Debug.Log($"{www.error} when uploading: {p}");
         }
+        else
+        {
+            Debug.Log($"Completed upload:{p}");
+            Get();
+        }
+        
     }
+    */
 
     List<List<PixelData>> ConvertFromJSON(){
 //deserialize
@@ -182,19 +191,20 @@ public class Px{
 }
 
 public class PixelSubmission{
-    List<Px> new_pixels;
+    public List<Px_Container> new_pixels;
 
     public PixelSubmission(List<PixelData> list){
-        List<Px> newList = new List<Px>();
+        List<Px_Container> newList = new List<Px_Container>();
         for(int i=0; i<list.Count; i++){
             var p = list[i];
-            newList.Add(new Px(){
+            newList.Add(new Px_Container()
+                {px = new Px(){
                 x=p.x.ToString(),
                 y=p.y.ToString(),
                 r=p.r.ToString(),
                 g=p.g.ToString(),
                 b=p.b.ToString()
-            });
+            }});
         }
         new_pixels = newList;
     }

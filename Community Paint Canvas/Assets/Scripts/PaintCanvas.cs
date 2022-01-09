@@ -9,6 +9,7 @@ public class PaintCanvas : MonoBehaviour
 
     VisualTreeAsset _pixelTemplate;
 
+    public List<PixelData> ChangedPixels {get=>_changedPixels;}
     List<PixelData> _changedPixels;
 
     // Start is called before the first frame update
