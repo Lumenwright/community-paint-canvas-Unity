@@ -54,6 +54,7 @@ public class WebRequest :MonoBehaviour
     public void Post(PixelSubmission s){
         if(enabled){
             string c = JsonConvert.SerializeObject(s);
+            Debug.Log($"uploading: {c}");
             Dictionary<string, string> d = new Dictionary<string, string>();
             d.Add(NEW_PX_NAME, c);
             StartCoroutine(Upload(PIXELS_ENDPOINT, d));
@@ -62,7 +63,9 @@ public class WebRequest :MonoBehaviour
 
     public void Submit(){
         var list = EventSystem.Services.CanvasUI.ChangedPixels;
-        PixelSubmission sub = new PixelSubmission(list);
+        var total = EventSystem.Services.MainPanel.Total;
+        var text = EventSystem.Services.MainPanel.Response;
+        PixelSubmission sub = new PixelSubmission(list, total, text);
         Post(sub);
     }
 
@@ -162,6 +165,7 @@ public class WebRequest :MonoBehaviour
 [Serializable]
 public class Canvas{
     public List<Px_Row> canvas;
+    public float total_donate;
     public Canvas(){
         canvas = new List<Px_Row>();
     }
@@ -192,8 +196,9 @@ public class Px{
 
 public class PixelSubmission{
     public List<Px_Container> new_pixels;
-
-    public PixelSubmission(List<PixelData> list){
+    public float total_donate;
+    public string response;
+    public PixelSubmission(List<PixelData> list, float total, string text){
         List<Px_Container> newList = new List<Px_Container>();
         for(int i=0; i<list.Count; i++){
             var p = list[i];
@@ -207,6 +212,8 @@ public class PixelSubmission{
             }});
         }
         new_pixels = newList;
+        total_donate = total;
+        response = text;
     }
 }
 }

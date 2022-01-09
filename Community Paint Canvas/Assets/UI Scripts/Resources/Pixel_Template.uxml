@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement style="width: 10%; height: 10%; min-width: 10px; min-height: 10px;">
-        <ui:Button text="Button" display-tooltip-when-elided="true" />
+    <ui:VisualElement style="width: auto; height: auto; min-width: 10px; min-height: 10px; max-width: 10px; max-height: 10px;">
+        <ui:Button display-tooltip-when-elided="true" name="Button" />
     </ui:VisualElement>
 </ui:UXML>

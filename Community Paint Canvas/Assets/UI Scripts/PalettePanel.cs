@@ -11,7 +11,10 @@ public class PalettePanel : MonoBehaviour
     // internal
     VisualElement _root;
     Label _total_element;
+    public float Total {get=>_total;}
     float _total; // dollars.cents
+    public string Response {get=>_response;}
+    string _response;
 
     // Start is called before the first frame update
     void OnEnable()
