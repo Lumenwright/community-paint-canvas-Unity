@@ -5,19 +5,29 @@ using UnityEngine.UIElements;
 
 public class PalettePanel : MonoBehaviour
 {
+    //params
+    [SerializeField] float _pxToPriceFactor = 1f;
+
+    // internal
     VisualElement root;
+    VisualElement total_element;
+    float _total;
 
     // Start is called before the first frame update
     void OnEnable()
     {
-        root = GetComponent<UIDocument>().rootVisualElement;
+        root = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("palette-panel");
+        total_element = root.Q<VisualElement>("Counter").Q<Label>("total-number");
         GenerateUI();
     }
 
+    public void UpdateTotal(int numPx){
+
+    }
+
     void GenerateUI(){
-        Button submitButton = new Button();
+        Button submitButton = root.Q<Button>("submit-button");
         submitButton.RegisterCallback<PointerDownEvent>(OnClick);
-        root.Add(submitButton);
     }
 
     void OnClick(PointerDownEvent e){

@@ -15,7 +15,7 @@ public class PaintCanvas : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        root = GetComponent<UIDocument>().rootVisualElement;
+        root = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("canvas");
         EventSystem.Services.CanvasAPI.m_CanvasChanged.AddListener(GenerateCanvas);
         ResetSubmission();
     }

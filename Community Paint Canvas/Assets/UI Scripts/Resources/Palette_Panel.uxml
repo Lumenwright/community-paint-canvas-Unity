@@ -1,9 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<engine:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
->
-    
-</engine:UXML>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Counter" src="project://database/Assets/UI%20Scripts/Resources/Counter.uxml?fileID=9197481963319205126&amp;guid=0c78ad0409788d542b0600736c1cf074&amp;type=3#Counter" />
+    <ui:Instance template="Counter" name="Counter" />
+    <ui:Button text="Submit" display-tooltip-when-elided="true" name="submit-button" />
+</ui:UXML>

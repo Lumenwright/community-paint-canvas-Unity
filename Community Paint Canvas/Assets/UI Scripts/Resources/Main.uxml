@@ -1,3 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement />
+    <ui:Template name="Canvas" src="project://database/Assets/UI%20Scripts/Resources/Canvas.uxml?fileID=9197481963319205126&amp;guid=b6b3f5b4bb14d7e4d870839c8b6d5a8f&amp;type=3#Canvas" />
+    <ui:Template name="Palette_Panel" src="project://database/Assets/UI%20Scripts/Resources/Palette_Panel.uxml?fileID=9197481963319205126&amp;guid=b1342ca72bbb6724a8e57c413dc6602b&amp;type=3#Palette_Panel" />
+    <ui:VisualElement>
+        <ui:Instance template="Canvas" name="canvas" />
+        <ui:Instance template="Palette_Panel" name="palette-panel" />
+    </ui:VisualElement>
 </ui:UXML>
