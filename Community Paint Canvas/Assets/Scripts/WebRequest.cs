@@ -6,56 +6,60 @@ using UnityEngine.Networking;
 using UnityEngine.Events;
 using Newtonsoft.Json;
 
-public class WebRequest : MonoBehaviour
+namespace JsonClasses{
+public class WebRequest :MonoBehaviour
 {
-    public List<List<Px>> CanvasData {get=>ConvertJSON();}
+    public List<List<PixelData>> CanvasData {get=>ConvertFromJSON();}
     string _canvasData;
-    public UnityEvent m_CanvasChanged;
-
-    public static WebRequest CanvasAPI;
-
     string PIXELS_ENDPOINT = "http://127.0.0.1:5000/pixels";
+    string NEW_PX_NAME = "new_pixels";
+    string CANVAS_NAME = "Canvas";
+    string ROW_NAME = "Px_Row";
+    string PX_NAME = "Px";
+    string X_NAME = "x";
+    string Y_NAME = "y";
+    string RED_NAME = "r";
+    string GREEN_NAME = "g";
+    string BLUE_NAME = "b";
 
-    void Awake(){
-        if(CanvasAPI != null){
-            Destroy(this);
-        }
-        else{
-            CanvasAPI = this;
-        }
-        PaintCanvas.CanvasController.enabled = true;
-    }
-
-    void Start()
-    {
+    public UnityEvent m_CanvasChanged;
+    void OnEnable(){
         if (m_CanvasChanged == null)
             m_CanvasChanged = new UnityEvent();
-        Get();
     }
 
     // Start is called before the first frame update
     public void Get()
     {
-        StartCoroutine(GetRequest(PIXELS_ENDPOINT));
+        if(enabled)
+            StartCoroutine(GetRequest(PIXELS_ENDPOINT));
     }
 
-//TODO: change to json 
-    public void Post(string x, string y){
-        string X_NAME = "x";
-        string Y_NAME = "y";
-        string RED = "r";
-        string GREEN = "g";
-        string BLUE = "b";
-
-        string test = "0";
+    /// submit a change to a single pixel
+    public void Post(string x, string y, Px newPixel){
 
         Dictionary<string,string> p = new Dictionary<string,string>();
         p.Add(X_NAME, x);
         p.Add(Y_NAME, y);
-        p.Add(RED, test );
-        p.Add(GREEN, test);
-        p.Add(BLUE, test);
-        StartCoroutine(Upload(PIXELS_ENDPOINT, p));
+        p.Add(RED_NAME, newPixel.r.ToString());
+        p.Add(GREEN_NAME, newPixel.g.ToString());
+        p.Add(BLUE_NAME, newPixel.b.ToString());
+
+        if(enabled)
+            StartCoroutine(Upload(PIXELS_ENDPOINT, p));
+    }
+
+    /// submit a change to a list of pixels
+    public void Post(PixelSubmission s){
+        if(enabled){
+            string c = JsonConvert.SerializeObject(s);
+            StartCoroutine(Upload(PIXELS_ENDPOINT, c));
+        }
+    }
+
+    public void Submit(List<PixelData> list){
+        PixelSubmission sub = new PixelSubmission(list);
+        Post(sub);
     }
 
     IEnumerator GetRequest(string uri)
@@ -85,6 +89,9 @@ public class WebRequest : MonoBehaviour
             }
         }
     }
+
+    /// send a dictionary expecting keys X, Y, red, green, blue
+    /// but it can work for anything to anywhere
     IEnumerator Upload(string uri, Dictionary<string,string> p)
     {
 
@@ -98,20 +105,44 @@ public class WebRequest : MonoBehaviour
             }
             else
             {
-                Debug.Log("Form upload complete!");
+                Debug.Log("Single pixel upload complete!");
                 Get();
             }
         }
     }
 
-    List<List<Px>> ConvertJSON(){
+    IEnumerator Upload(string uri, string p)
+    {
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri,p))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("New canvas portion upload complete!");
+                Get();
+            }
+        }
+    }
+
+    List<List<PixelData>> ConvertFromJSON(){
 //deserialize
         Canvas list = JsonConvert.DeserializeObject<Canvas>(_canvasData);
-        List<List<Px>> pixels = new List<List<Px>>();
+        List<List<PixelData>> pixels = new List<List<PixelData>>();
         foreach(Px_Row row in list.canvas){
-            List<Px> pRow = new List<Px>();
-            foreach(Px p in row.px_row){
-                pRow.Add(p);
+            List<PixelData> pRow = new List<PixelData>();
+            foreach(Px_Container p in row.px_row){
+                pRow.Add(new PixelData(){
+                    x=int.Parse(p.px.x),
+                    y=int.Parse(p.px.y),
+                    r=float.Parse(p.px.r),
+                    g=float.Parse(p.px.g),
+                    b=float.Parse(p.px.b)});
             }
             pixels.Add(pRow);
         }
@@ -129,16 +160,50 @@ public class Canvas{
 
 [Serializable]
 public class Px_Row{
-    public List<Px> px_row;
+    public List<Px_Container> px_row;
 
     public Px_Row(){
-        px_row = new List<Px>();
+        px_row = new List<Px_Container>();
     }
 }
 
 [Serializable]
+public class Px_Container{
+    public Px px;
+}
+
+[Serializable]
 public class Px{
-    public int r;
-    public int g;
-    public int b;
+    public string x;
+    public string y;
+    public string r;
+    public string g;
+    public string b;
+}
+
+public class PixelSubmission{
+    List<Px> new_pixels;
+
+    public PixelSubmission(List<PixelData> list){
+        List<Px> newList = new List<Px>();
+        for(int i=0; i<list.Count; i++){
+            var p = list[i];
+            newList.Add(new Px(){
+                x=p.x.ToString(),
+                y=p.y.ToString(),
+                r=p.r.ToString(),
+                g=p.g.ToString(),
+                b=p.b.ToString()
+            });
+        }
+        new_pixels = newList;
+    }
+}
+}
+public class PixelData{
+    public int x;
+    public int y;
+    public float r;
+    public float g;
+    public float b;
 }

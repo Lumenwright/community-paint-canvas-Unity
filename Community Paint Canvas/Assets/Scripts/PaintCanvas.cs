@@ -6,45 +6,61 @@ using UnityEngine.UIElements;
 public class PaintCanvas : MonoBehaviour
 {
     VisualElement root;
-    public WebRequest _onlineCanvas;
 
     VisualTreeAsset _pixelTemplate;
 
-    public static PaintCanvas CanvasController;
-    void Awake(){
-        if(CanvasController!=null){
-            Destroy(this);
-        }
-        else{
-            CanvasController = this;
-        }
-        enabled = false;
-    }
+    List<PixelData> _changedPixels;
+
     // Start is called before the first frame update
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
-        WebRequest.CanvasAPI.Get();
-        _onlineCanvas.m_CanvasChanged.AddListener(GenerateCanvas);
+        EventSystem.Services.CanvasAPI.m_CanvasChanged.AddListener(GenerateCanvas);
+        ResetSubmission();
     }
 
+    // Add a changed pixel information to the submission.
+    public List<PixelData> AddPixel(PixelData newPx){
+        if(_changedPixels!=null){
+            _changedPixels.Add(newPx);
+        }
+        return _changedPixels;
+    }
+
+    public List<PixelData> RemovePixel(PixelData px){
+        if(_changedPixels!=null){
+            _changedPixels.Remove(px);
+        }
+        return _changedPixels;
+    }
+
+    public void ResetSubmission(){
+        _changedPixels = new List<PixelData>();
+    }
+
+    // Get the canvas from the API and generate the UI
     void GenerateCanvas(){
-        List<List<Px>> canvas = _onlineCanvas.CanvasData;
+        if(!enabled){
+            Debug.Log("CanvasController not enabled.");
+            return;
+        }
+
+        JsonClasses.WebRequest onlineCanvas = EventSystem.Services.CanvasAPI;
+        List<List<PixelData>> canvas = onlineCanvas.CanvasData;
         var lenX = canvas.Count;
-        var lenY = canvas[0].Count;
         for(int i = 0; i<lenX; i++){
             Row newRow = new Row();
+            var lenY = canvas[i].Count;
             for(int j =0; j<lenY; j++){
                 Pixel newPx = new Pixel();
-                newPx.Init(i.ToString(),j.ToString());
+                newPx.Init(canvas[i][j]);
                 var container = newRow.Q<VisualElement>("RowElement");
                 container.Add(newPx);
             }
             root.Add(newRow);
         }
-        _onlineCanvas.m_CanvasChanged.RemoveListener(GenerateCanvas);
-        _onlineCanvas.m_CanvasChanged.AddListener(OnClick);
-
+        onlineCanvas.m_CanvasChanged.RemoveListener(GenerateCanvas);
+        onlineCanvas.m_CanvasChanged.AddListener(OnClick);
     }
 
     void OnClick(){
