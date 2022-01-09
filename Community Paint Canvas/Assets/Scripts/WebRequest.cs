@@ -147,8 +147,8 @@ public class WebRequest :MonoBehaviour
             List<PixelData> pRow = new List<PixelData>();
             foreach(Px_Container p in row.px_row){
                 pRow.Add(new PixelData(){
-                    x=p.px.x,
-                    y=p.px.y,
+                    x=int.Parse(p.px.x),
+                    y=int.Parse(p.px.y),
                     r=float.Parse(p.px.r),
                     g=float.Parse(p.px.g),
                     b=float.Parse(p.px.b)});
@@ -183,8 +183,8 @@ public class Px_Container{
 
 [Serializable]
 public class Px{
-    public int x;
-    public int y;
+    public string x;
+    public string y;
     public string r;
     public string g;
     public string b;
@@ -199,8 +199,8 @@ public class PixelSubmission{
             var p = list[i];
             newList.Add(new Px_Container()
                 {px = new Px(){
-                x=p.x,
-                y=p.y,
+                x=p.x.ToString(),
+                y=p.y.ToString(),
                 r=p.r.ToString(),
                 g=p.g.ToString(),
                 b=p.b.ToString()

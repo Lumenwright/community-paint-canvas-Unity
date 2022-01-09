@@ -6,27 +6,28 @@ using UnityEngine.UIElements;
 public class PalettePanel : MonoBehaviour
 {
     //params
-    [SerializeField] float _pxToPriceFactor = 1f;
+    [SerializeField] float _pxToPriceFactor = 1f; //cents
 
     // internal
-    VisualElement root;
-    VisualElement total_element;
-    float _total;
+    VisualElement _root;
+    Label _total_element;
+    float _total; // dollars.cents
 
     // Start is called before the first frame update
     void OnEnable()
     {
-        root = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("palette-panel");
-        total_element = root.Q<VisualElement>("Counter").Q<Label>("total-number");
+        _root = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("palette-panel");
+        _total_element= _root.Q<VisualElement>("Counter").Q<Label>("total-number");
         GenerateUI();
     }
 
-    public void UpdateTotal(int numPx){
-
+    public void UpdateTotal(int numPxTotal){
+        _total = numPxTotal*_pxToPriceFactor/100;
+        _total_element.text = $"${_total}";
     }
 
     void GenerateUI(){
-        Button submitButton = root.Q<Button>("submit-button");
+        Button submitButton = _root.Q<Button>("submit-button");
         submitButton.RegisterCallback<PointerDownEvent>(OnClick);
     }
 

@@ -515,3 +515,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CanvasAPI: {fileID: 2020110860}
   CanvasUI: {fileID: 97939311}
+  MainPanel: {fileID: 97939312}

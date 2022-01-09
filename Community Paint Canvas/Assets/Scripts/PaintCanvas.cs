@@ -24,6 +24,7 @@ public class PaintCanvas : MonoBehaviour
     public List<PixelData> AddPixel(PixelData newPx){
         if(_changedPixels!=null){
             _changedPixels.Add(newPx);
+            EventSystem.Services.MainPanel.UpdateTotal(_changedPixels.Count);
         }
         return _changedPixels;
     }
@@ -31,6 +32,7 @@ public class PaintCanvas : MonoBehaviour
     public List<PixelData> RemovePixel(PixelData px){
         if(_changedPixels!=null){
             _changedPixels.Remove(px);
+            EventSystem.Services.MainPanel.UpdateTotal(_changedPixels.Count);
         }
         return _changedPixels;
     }

@@ -37,19 +37,20 @@ public class Pixel : VisualElement
     }
 
     void OnPointerDown(PointerDownEvent evt){
+        void AssignColour(Color colour){
+            _pixelObj.r = colour.r;
+            _pixelObj.g = colour.g;
+            _pixelObj.b = colour.b;
+        }
         Debug.Log("clicked");
         _isActive = !_isActive;
         if(_isActive){
-            _pixelObj.r = _activeColour.r;
-            _pixelObj.g = _activeColour.g;
-            _pixelObj.b = _activeColour.b;
+            AssignColour(_activeColour);
             EventSystem.Services.CanvasUI.AddPixel(_pixelObj);
             ChangeColour(_activeColour);
         }
         else{
-            _pixelObj.r = _previousColour.r;
-            _pixelObj.g = _previousColour.g;
-            _pixelObj.b = _previousColour.b;
+            AssignColour(_previousColour);
             EventSystem.Services.CanvasUI.RemovePixel(_pixelObj);
             ChangeColour(_previousColour);
         }
